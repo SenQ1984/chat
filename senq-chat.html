@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SenQ Chat</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f0f9f9;
+    }
+    #responseBox {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h2>SenQ Chat</h2>
+  <textarea id="userInput" placeholder="Type your thoughts..." rows="4" style="width:100%"></textarea><br>
+  <button onclick="sendMessageToParent()">Reflect with SenQ</button>
+
+  <div id="responseBox">Your response will appear here.</div>
+
+  <script>
+    function sendMessageToParent() {
+      const message = document.getElementById("userInput").value;
+      window.parent.postMessage({ type: "senq-message", content: message }, "*");
+      document.getElementById("responseBox").innerText = "SenQ is thinking...";
+    }
+
+    window.addEventListener("message", (event) => {
+      if (event.data?.type === "senq-response") {
+        document.getElementById("responseBox").innerText = event.data.content;
+      }
+    });
+  </script>
+</body>
+</html>
